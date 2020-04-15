@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ShopSafeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Capacity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Value" Type="nchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Store">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Store_Location">
+          <Key>
+            <PropertyRef Name="Store_Id" />
+            <PropertyRef Name="Location_Id" />
+          </Key>
+          <Property Name="Store_Id" Type="int" Nullable="false" />
+          <Property Name="Location_Id" Type="int" Nullable="false" />
+          <Property Name="Capacity_Id" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Current_Capacity" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Store_Location_Capacity">
+          <End Role="Capacity" Type="Self.Capacity" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Store_Location" Type="Self.Store_Location" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Capacity">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Store_Location">
+              <PropertyRef Name="Capacity_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShopSafeModelStoreContainer">
+          <EntitySet Name="Capacity" EntityType="Self.Capacity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Store" EntityType="Self.Store" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Store_Location" EntityType="Self.Store_Location" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Store_Location_Capacity" Association="Self.FK_Store_Location_Capacity">
+            <End Role="Capacity" EntitySet="Capacity" />
+            <End Role="Store_Location" EntitySet="Store_Location" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ShopSafeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Store">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Store_Location">
+          <Key>
+            <PropertyRef Name="Store_Id" />
+            <PropertyRef Name="Location_Id" />
+          </Key>
+          <Property Name="Store_Id" Type="Int32" Nullable="false" />
+          <Property Name="Location_Id" Type="Int32" Nullable="false" />
+          <Property Name="Capacity_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Capacity" Relationship="ShopSafeModel.FK_Store_Location_Capacity" FromRole="Store_Location" ToRole="Capacity" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Current_Capacity" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Locations" EntityType="Self.Location" />
+          <EntitySet Name="Stores" EntityType="Self.Store" />
+          <EntitySet Name="Store_Location" EntityType="Self.Store_Location" />
+          <EntitySet Name="Capacities" EntityType="ShopSafeModel.Capacity" />
+          <AssociationSet Name="FK_Store_Location_Capacity" Association="ShopSafeModel.FK_Store_Location_Capacity">
+            <End Role="Capacity" EntitySet="Capacities" />
+            <End Role="Store_Location" EntitySet="Store_Location" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Capacity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Store_Location" Relationship="ShopSafeModel.FK_Store_Location_Capacity" FromRole="Capacity" ToRole="Store_Location" />
+        </EntityType>
+        <Association Name="FK_Store_Location_Capacity">
+          <End Type="ShopSafeModel.Capacity" Role="Capacity" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ShopSafeModel.Store_Location" Role="Store_Location" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Capacity">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Store_Location">
+              <PropertyRef Name="Capacity_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ShopSafeModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Locations">
+            <EntityTypeMapping TypeName="ShopSafeModel.Location">
+              <MappingFragment StoreEntitySet="Location">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stores">
+            <EntityTypeMapping TypeName="ShopSafeModel.Store">
+              <MappingFragment StoreEntitySet="Store">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Store_Location">
+            <EntityTypeMapping TypeName="ShopSafeModel.Store_Location">
+              <MappingFragment StoreEntitySet="Store_Location">
+                <ScalarProperty Name="Current_Capacity" ColumnName="Current_Capacity" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Capacity_Id" ColumnName="Capacity_Id" />
+                <ScalarProperty Name="Store_Id" ColumnName="Store_Id" />
+                <ScalarProperty Name="Location_Id" ColumnName="Location_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Capacities">
+            <EntityTypeMapping TypeName="ShopSafeModel.Capacity">
+              <MappingFragment StoreEntitySet="Capacity">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

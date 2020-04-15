@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ShopSafeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Location">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Store">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Store_Location">
+    <Key>
+      <PropertyRef Name="Store_Id" />
+      <PropertyRef Name="Location_Id" />
+    </Key>
+    <Property Name="Store_Id" Type="Int32" Nullable="false" />
+    <Property Name="Location_Id" Type="Int32" Nullable="false" />
+    <Property Name="Capacity_Id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Capacity" Relationship="ShopSafeModel.FK_Store_Location_Capacity" FromRole="Store_Location" ToRole="Capacity" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Current_Capacity" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Locations" EntityType="Self.Location" />
+    <EntitySet Name="Stores" EntityType="Self.Store" />
+    <EntitySet Name="Store_Location" EntityType="Self.Store_Location" />
+    <EntitySet Name="Capacities" EntityType="ShopSafeModel.Capacity" />
+    <AssociationSet Name="FK_Store_Location_Capacity" Association="ShopSafeModel.FK_Store_Location_Capacity">
+      <End Role="Capacity" EntitySet="Capacities" />
+      <End Role="Store_Location" EntitySet="Store_Location" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Capacity">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Value" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="Store_Location" Relationship="ShopSafeModel.FK_Store_Location_Capacity" FromRole="Capacity" ToRole="Store_Location" />
+  </EntityType>
+  <Association Name="FK_Store_Location_Capacity">
+    <End Type="ShopSafeModel.Capacity" Role="Capacity" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="ShopSafeModel.Store_Location" Role="Store_Location" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Capacity">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Store_Location">
+        <PropertyRef Name="Capacity_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

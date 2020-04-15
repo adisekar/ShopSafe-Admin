@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "ShopSafe - Admin Home";
+}
+
+<h1>Welcome to @ViewBag.Store at @ViewBag.Location</h1>
+
+<div id="root"></div>
+
+@section scripts{
+    <script type="text/javascript">
+        window.MAX_CAPACITY = @ViewBag.MaxCapacity;
+        window.INITIAL_EXISTING_CAPACITY = @ViewBag.CurrentCapacity;
+        window.ADMIN = true;
+
+    </script>
+    <script src="~/Scripts/bundle.js"></script>
+}
